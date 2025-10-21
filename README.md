@@ -1,11 +1,11 @@
 # mongo_emb 
 
-## 安装
+## install
 ```shell
- pip install -U --index-url https://test.pypi.org/simple/ remote_run_everything
+ pip install -U --index-url https://test.pypi.org/simple/mongo_emb
 ```
 
-## embed mongodb implemented by rust
+## embed mongodb implemented by rust with python api
 ```python
 from mongo_emb import PyMongoEmb
 
@@ -23,3 +23,15 @@ print(col.len())
 
 ```
 
+## Current methods supported for collection
+ - delete_one
+ - delete_many
+ - find
+ - find_one
+ - insert_many
+ - insert_one
+ - len
+ - name
+ - update_many (with upsert option)
+ - update_one (with upsert option)
+ - aggregate
