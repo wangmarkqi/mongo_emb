@@ -1,0 +1,25 @@
+# mongo_emb 
+
+## 安装
+```shell
+ pip install -U --index-url https://test.pypi.org/simple/ remote_run_everything
+```
+
+## embed mongodb implemented by rust
+```python
+from mongo_emb import PyMongoEmb
+
+db = PyMongoEmb("db23")
+col = db['test']
+data = [{"foo": "ba", "titi": "kpkp"}]
+col.insert_one(data[0])
+print(col.len())
+col.update_one({"_id": '68f73fe7790a4a5d60d08dba'}, {"$set": {"xx": 12}}, upsert=True)
+for i in col.find({}):
+    print (i)
+col.delete_one({'titi': 'kpkp'})
+
+print(col.len())
+
+```
+

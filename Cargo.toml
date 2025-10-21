@@ -1,0 +1,19 @@
+[package]
+name = "mongo_emb"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+name = "mongo_emb"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+pyo3 = { version = "0.27.0", features = ["extension-module", "auto-initialize"] }
+polodb_core = "5.1.4"
+
+[tool.maturin]
+features = ["pyo3/extension-module"]
+
+[build-system]
+requires = ["maturin>=1.0,<2.0"]
+build-backend = "maturin"

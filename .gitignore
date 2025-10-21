@@ -1,0 +1,17 @@
+.iml
+logs/
+*.pickle
+*.exe
+*.rar
+*.zip
+.pypirc
+.git/
+dist/
+test/
+target/
+build/
+.vscode/
+.idea/
+
+
+
