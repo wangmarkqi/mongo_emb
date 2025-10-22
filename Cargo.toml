@@ -1,6 +1,6 @@
 [package]
 name = "mongo_emb"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 
 [lib]
@@ -8,12 +8,17 @@ name = "mongo_emb"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-pyo3 = { version = "0.27.0", features = ["extension-module", "auto-initialize"] }
+# "abi3-py38" tells pyo3 (and maturin) to build using the stable ABI with minimum Python version 3.8
+pyo3 = { version = "0.27.1", features = ["abi3-py38","extension-module", "auto-initialize"] }
 polodb_core = "5.1.4"
+
 
 [tool.maturin]
 features = ["pyo3/extension-module"]
+cargo-extra-args = "--release"
 
 [build-system]
 requires = ["maturin>=1.0,<2.0"]
 build-backend = "maturin"
+
+

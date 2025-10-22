@@ -1,5 +1,10 @@
 [project]
 name = "mongo_emb"
+version = "1.0.0"
+authors = [
+    { name="Wang Qi", email="wangmarkqi@gmail.com" },
+]
+readme = "README.md"
 requires-python = ">=3.8"
 classifiers = [
     "Programming Language :: Rust",
@@ -17,3 +22,10 @@ build-backend = "maturin"
 #python-source = "mypy"
 #module-name = "mongo_emb.pymongo_emb"
 features = ["pyo3/extension-module"]
+cargo-extra-args = "--release"
+
+#pip install ziglang
+#pyhon -m build
+#maturin publish
+#rustup target add x86_64-unknown-linux-musl
+#maturin build --release  --target  x86_64-unknown-linux-musl --zig
