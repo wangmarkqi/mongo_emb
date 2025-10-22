@@ -2,7 +2,7 @@
 
 ## install
 ```shell
- pip install -U --index-url https://test.pypi.org/simple/mongo_emb
+ pip install mongo_emb
 ```
 
 ## embed mongodb implemented by rust with python api
