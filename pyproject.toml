@@ -1,8 +1,8 @@
 [project]
 name = "mongo_emb"
-version = "1.0.0"
+version = "1.0.2"
 authors = [
-    { name="Wang Qi", email="wangmarkqi@gmail.com" },
+    { name = "Wang Qi", email = "wangmarkqi@gmail.com" },
 ]
 readme = "README.md"
 requires-python = ">=3.8"
@@ -27,5 +27,7 @@ cargo-extra-args = "--release"
 #pip install ziglang
 #pyhon -m build
 #maturin publish
-#rustup target add x86_64-unknown-linux-musl
-#maturin build --release  --target  x86_64-unknown-linux-musl --zig
+#rustup target add x86_64-unknown-linux-gnu
+# maturin build --release  --target  x86_64-unknown-linux-gnu --zig
+
+# 上传dist所有 twine upload dist/*

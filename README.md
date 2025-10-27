@@ -35,3 +35,16 @@ print(col.len())
  - update_many (with upsert option)
  - update_one (with upsert option)
  - aggregate
+ 
+## embed  kv store implemented by rust redb with python api
+```python
+from mongo_emb import PyRedb
+db = PyRedb("./test.rdb", "test")
+a = db.write("foo", "xxx")
+print("write", a)
+b = db.read("foo")
+print("read", b)
+c = db.read("undefine")
+print("read", c)
+```
+

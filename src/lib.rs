@@ -2,6 +2,11 @@ use pyo3::prelude::*;
 
 mod helper_type_translator;
 mod py_database;
+mod py_rdb;
+mod rdb;
+mod tool;
+
+use py_rdb::PyRdb;
 
 use py_database::PyCollection;
 use py_database::PyDatabase;
@@ -12,6 +17,7 @@ fn mongo_emb(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<PyDatabase>()?;
 
     m.add_class::<PyCollection>()?;
+    m.add_class::<PyRdb>()?;
 
     Ok(())
 }
