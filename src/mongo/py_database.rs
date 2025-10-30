@@ -1,4 +1,4 @@
-use crate::helper_type_translator::{
+use crate::mongo::helper_type_translator::{
     bson_to_py_obj, convert_py_list_to_vec_document, convert_py_obj_to_document,
     delete_result_to_pydict, document_to_pydict, update_result_to_pydict,
 };

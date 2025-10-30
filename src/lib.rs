@@ -1,15 +1,12 @@
 use pyo3::prelude::*;
 
-mod helper_type_translator;
-mod py_database;
-mod py_rdb;
-mod rdb;
-mod tool;
+mod mongo;
+mod redb;
 
-use py_rdb::PyRdb;
+use redb::py_rdb::PyRdb;
 
-use py_database::PyCollection;
-use py_database::PyDatabase;
+use mongo::py_database::PyCollection;
+use mongo::py_database::PyDatabase;
 
 #[pymodule]
 fn mongo_emb(m: &Bound<'_, PyModule>) -> PyResult<()> {

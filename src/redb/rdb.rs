@@ -1,4 +1,4 @@
-use super::tool::*;
+use crate::redb::tool::*;
 use anyhow::{Error, Result, bail};
 use redb::{Database, ReadableDatabase, TableDefinition};
 use std::collections::HashMap;
@@ -16,7 +16,7 @@ impl Rdb {
         })
     }
 
-    fn write_value(&self, k: &str, v: &str, tname: &str) -> Result<(), Error> {
+    fn write_value(&self, k: &str, v: &str, tname: &str) -> Result<()> {
         let tab: TableDefinition<&str, &str> = TableDefinition::new(tname);
         let write_txn = self.db.begin_write()?;
         {
@@ -26,12 +26,22 @@ impl Rdb {
         write_txn.commit()?;
         Ok(())
     }
+    fn delete_value(&self, k: &str, tname: &str) -> Result<()> {
+        let tab: TableDefinition<&str, &str> = TableDefinition::new(tname);
+        let write_txn = self.db.begin_write()?;
+        {
+            let mut table = write_txn.open_table(tab)?;
+            table.remove(k)?;
+        }
+        write_txn.commit()?;
+        Ok(())
+    }
     fn log_key(&self, k: &str) -> String {
         let n = &self.tname;
-        crate::f_str!("{n}_{k}")
+        crate::f_str!("{n}/{k}")
     }
 
-    fn read_value(&self, k: &str, tname: &str) -> Result<String, Error> {
+    fn read_value(&self, k: &str, tname: &str) -> Result<String> {
         let tab: TableDefinition<&str, &str> = TableDefinition::new(tname);
         let read_txn = self.db.begin_read()?;
         let table = read_txn.open_table(tab)?;
@@ -41,14 +51,20 @@ impl Rdb {
         }
         Ok("".to_string())
     }
-    pub fn write(&self, k: &str, v: &str) -> Result<(), Error> {
+    pub fn write(&self, k: &str, v: &str) -> Result<()> {
         self.write_value(k, v, &self.tname)?;
         let logv = now();
         let logk = self.log_key(k);
         self.write_value(&logk, &logv, TAB0)?;
         Ok(())
     }
-    pub fn read(&self, k: &str) -> Result<HashMap<String, String>, Error> {
+    pub fn delete(&self, k: &str) -> Result<()> {
+        self.delete_value(k, &self.tname)?;
+        let logk = self.log_key(k);
+        self.delete_value(&logk, TAB0)?;
+        Ok(())
+    }
+    pub fn read(&self, k: &str) -> Result<HashMap<String, String>> {
         let mut dic = HashMap::new();
         dic.insert("value".to_string(), self.read_value(k, &self.tname)?);
         let logk = self.log_key(k);
@@ -56,19 +72,18 @@ impl Rdb {
         dic.insert("update".to_string(), logv);
         Ok(dic)
     }
-    pub fn contain(&self, url: &str) -> Result<HashMap<String, String>, Error> {
+    pub fn keys(&self) -> Result<Vec<String>> {
+        let mut l: Vec<String> = vec![];
         let tab: TableDefinition<&str, &str> = TableDefinition::new(&self.tname);
         let read_txn = self.db.begin_read()?;
         let table = read_txn.open_table(tab)?;
         for (k, v) in table.range("0"..)?.flatten() {
-            let prefix = format!("/{}/", k.value().replace("/", ""));
-            if url.contains(&prefix) {
-                return self.read(k.value());
-            }
+            let kk = k.value().to_string();
+            l.push(kk);
         }
-        self.default_dic("")
+        Ok(l)
     }
-    pub fn default_dic(&self, v: &str) -> Result<HashMap<String, String>, Error> {
+    pub fn default_dic(&self, v: &str) -> Result<HashMap<String, String>> {
         let mut dic = HashMap::new();
         dic.insert("value".to_string(), v.to_string());
         dic.insert("update".to_string(), now());
@@ -83,8 +98,9 @@ fn test_db() -> Result<()> {
     rdb.write("rust", "localhost:7778")?;
     rdb.write("deploy", "localhost:7777")?;
     let a = rdb.read("rc")?;
-    let b = rdb.contain("/deploy/asd")?;
-    let c = rdb.read("rust")?;
-    dbg!(a, b, c);
+    rdb.delete("rc")?;
+    let aa = rdb.read("rc")?;
+    let l = rdb.keys()?;
+    dbg!(a,aa, l);
     Ok(())
 }

@@ -21,3 +21,9 @@ class PyRedb:
 
     def read(self, k):
         return self.__rust_db.read(k)
+
+    def delete(self, k):
+        return self.__rust_db.delete(k)
+
+    def keys(self):
+        return self.__rust_db.keys()

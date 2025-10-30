@@ -1,6 +1,6 @@
 [project]
 name = "mongo_emb"
-version = "1.0.2"
+version = "1.0.4"
 authors = [
     { name = "Wang Qi", email = "wangmarkqi@gmail.com" },
 ]
